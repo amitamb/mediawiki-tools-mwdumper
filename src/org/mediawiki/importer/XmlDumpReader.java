@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import java.io.*;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -41,6 +43,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import org.xml.sax.InputSource;
 
 public class XmlDumpReader  extends DefaultHandler {
 	InputStream input;
@@ -87,8 +91,10 @@ public class XmlDumpReader  extends DefaultHandler {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
-	
-			parser.parse(input, this);
+			Reader reader = new InputStreamReader(input,"UTF-8");
+			InputSource is = new InputSource(reader);
+			is.setEncoding("UTF-8");
+			parser.parse(is, this);
 		} catch (ParserConfigurationException e) {
 			throw (IOException)new IOException(e.getMessage()).initCause(e);
 		} catch (SAXException e) {
